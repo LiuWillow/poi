@@ -14,5 +14,5 @@ public class RectConstant {
     public static final Location BORDER_POINT_4 = new Location(138.251953, 47.040182);
     public static final Location BORDER_POINT_5 = new Location(114.345703, 15.453680);
     public static final Location BORDER_POINT_6 = new Location(69.873046, 36.173356);
-
+    public static final int SPLIT_NUM_OF_BORDER = 140;
 }
