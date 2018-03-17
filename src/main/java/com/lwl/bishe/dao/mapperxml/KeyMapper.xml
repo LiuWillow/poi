@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lwl.bishe.dao.mapper.KeyMapper" >
+    <resultMap id="KeyMap" type="com.lwl.bishe.bean.Key" >
+        <id column="id" property="id"/>
+        <result column="name" property="name" />
+        <result column="times" property="times" />
+    </resultMap>
+
+    <select id="listAllKeys" resultMap="KeyMap">
+      SELECT * FROM `key` WHERE times &lt; 1900
+    </select>
+
+
+</mapper>

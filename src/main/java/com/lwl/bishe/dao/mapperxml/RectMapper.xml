@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lwl.bishe.dao.mapper.RectMapper" >
+
+   <insert id="saveRects" parameterType="java.util.List">
+       INSERT INTO
+       rect(lo1_lng, lo1_lat, lo2_lng, lo2_lat, lo3_lng, lo3_lat,
+       lo4_lng, lo4_lat)
+       VALUES
+       <foreach collection="list" item="rect" separator=",">
+           (#{rect.lo1.lng}, #{rect.lo1.lat},#{rect.lo2.lng}, #{rect.lo2.lat},
+           #{rect.lo3.lng}, #{rect.lo3.lat},#{rect.lo4.lng}, #{rect.lo4.lat})
+       </foreach>
+   </insert>
+
+    <insert id="saveRect" parameterType="com.lwl.bishe.bean.Rect">
+       INSERT INTO
+       rect(lo1_lng, lo1_lat, lo2_lng, lo2_lat, lo3_lng, lo3_lat,
+       lo4_lng, lo4_lat)
+       VALUES
+           (#{rect.lo1.lng}, #{rect.lo1.lat},#{rect.lo2.lng}, #{rect.lo2.lat},
+           #{rect.lo3.lng}, #{rect.lo3.lat},#{rect.lo4.lng}, #{rect.lo4.lat})
+   </insert>
+
+</mapper>
