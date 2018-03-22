@@ -1,79 +1,90 @@
 package com.lwl.bishe.service;
 
-import com.lwl.bishe.bean.Location;
+import com.lwl.bishe.bean.Key;
 import com.lwl.bishe.bean.Rect;
+import com.lwl.bishe.constant.Constant;
 import com.lwl.bishe.constant.RectConstant;
+import com.lwl.bishe.dao.mapper.RectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
+
 /**
  * date  2018/3/17
  * author liuwillow
  **/
 @Service
 public class RectServiceImpl implements RectService {
-    private static final int UP = 0;
-    private static final int RIGHT = 1;
-    private static final int BELOW = 2;
-    private static final int LEFT = 3;
+    private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(5,
+            10, 3000, TimeUnit.MILLISECONDS,
+            new LinkedBlockingDeque<>());
+
     @Autowired
     private SplitService splitService;
 
+    @Autowired
+    private KeyService keyService;
+
+    @Autowired
+    private GaodeService gaodeService;
+
+    @Autowired
+    private RectMapper rectMapper;
+
     @Override
     public void initRects() {
+        clearRects();
         Rect rectLeft = new Rect(RectConstant.BORDER_POINT_1, RectConstant.BORDER_POINT_2,
                 RectConstant.BORDER_POINT_5, RectConstant.BORDER_POINT_6);
-        Location[] upLocations = splitLine(rectLeft, UP);
-        Location[] rightLocations = splitLine(rectLeft, RIGHT);
-        Location[] belowLocations = splitLine(rectLeft, BELOW);
-        Location[] leftLocations = splitLine(rectLeft, LEFT);
-        for (int i = 0; i < RectConstant.SPLIT_NUM_OF_BORDER; i++){
-            
-        }
-        splitService.split(rectLeft, rect -> true);
+        splitService.split(rectLeft);
+
+        Rect rightLeft = new Rect(RectConstant.BORDER_POINT_2, RectConstant.BORDER_POINT_3,
+                RectConstant.BORDER_POINT_4, RectConstant.BORDER_POINT_5);
+        splitService.split(rightLeft);
     }
 
-    private Location[] splitLine(Rect rect, int type) {
-        Location[] locations = new Location[RectConstant.SPLIT_NUM_OF_BORDER + 1];
-        Location lo1 = getLo1ByType(rect, type);
-        Location lo2 = getLo2ByType(rect, type);
-
-        double gapLng = lo1.getLng() - lo2.getLng() / RectConstant.SPLIT_NUM_OF_BORDER;
-        double gapLat = lo1.getLat() - lo2.getLat() / RectConstant.SPLIT_NUM_OF_BORDER;
-        int i = 0;
-        while (i++ <= RectConstant.SPLIT_NUM_OF_BORDER){
-            double newLng = lo1.getLng() + gapLng * i;
-            double newLat = lo1.getLat() + gapLat * i;
-            Location location = new Location(newLng, newLat);
-            locations[i] = location;
-        }
-        return locations;
+    @Override
+    public boolean saveRect(Rect rect) {
+        return rectMapper.saveRect(rect) > 0;
     }
 
-    private Location getLo2ByType(Rect rect, int type) {
-        switch (type){
-            case UP:
-                return rect.getLo2();
-            case RIGHT:
-                return rect.getLo3();
-            case BELOW:
-                return rect.getLo3();
-            case LEFT:
-                return rect.getLo4();
-        }
-        return null;
+    @Override
+    public boolean clearRects() {
+        rectMapper.clearRects();
+        return true;
     }
 
-    private Location getLo1ByType(Rect rect, int type) {
-        switch (type){
-            case UP:
-                return rect.getLo1();
-            case RIGHT:
-                return rect.getLo2();
-            case BELOW:
-                return rect.getLo4();
-            case LEFT:
-                return rect.getLo1();
+    @Override
+    public void test() {
+        if (executor.getQueue().isEmpty()){
+            System.out.println("线程池中无任务");
         }
-        return null;
+        Runnable task1 = this::sleep;
+        Runnable task2 = this::sleep;
+        Runnable task3 = this::sleep;
+        executor.execute(task1);
+        executor.execute(task2);
+        executor.execute(task3);
+        executor.shutdown();
+        while (true){
+            if (executor.isTerminated()){
+                System.out.println("线程池中任务执行完毕");
+                break;
+            }
+        }
     }
+
+    private void sleep() {
+        try {
+            System.out.println(Thread.currentThread().getName() + ":正在执行");
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.lwl.bishe.dao.mapper;
 
 import com.lwl.bishe.bean.Rect;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,4 +13,7 @@ import java.util.List;
 public interface RectMapper {
     int saveRects(List<Rect> rects);
     int saveRect(Rect rect);
+    void clearRects();
+    List<Rect> listRect(@Param("begin") int begin, @Param("pageSize") int pageSize);
+    int countRects();
 }

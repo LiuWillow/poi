@@ -31,4 +31,16 @@ public class Location {
     public void setLat(double lat) {
         this.lat = lat;
     }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "lng=" + lng +
+                ", lat=" + lat +
+                '}';
+    }
+
+    public String toParam() {
+        return lng + "," + lat;
+    }
 }

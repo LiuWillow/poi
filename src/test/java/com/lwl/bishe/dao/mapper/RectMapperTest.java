@@ -38,4 +38,9 @@ public class RectMapperTest {
         assertEquals(3, rectMapper.saveRects(rectList));
     }
 
+    @Test
+    public void testListRects() {
+        List<Rect> list = rectMapper.listRect(1, 1000);
+        assertEquals(1000, list.size());
+    }
 }

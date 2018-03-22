@@ -19,7 +19,6 @@ public class TestController {
 
     @GetMapping("/keys")
     public Key getKeys(){
-
         return keyMapper.listAllKeys().get(0);
     }
 }

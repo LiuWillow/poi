@@ -4,6 +4,13 @@ import com.lwl.bishe.bean.GaodeRequest;
 import com.lwl.bishe.constant.Constant;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -24,4 +31,11 @@ public class HttpUtilTest {
         System.out.println(result);
     }
 
+    @Test
+    public void baoliu() {
+        double a = 3.1234567;
+        BigDecimal b = new BigDecimal(a);
+        double x = b.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
+        System.out.println(x);
+    }
 }

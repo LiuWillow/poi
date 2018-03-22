@@ -10,5 +10,5 @@ import java.util.function.Predicate;
  * author liuwillow
  **/
 public interface SplitService {
-    void split(Rect rect, Predicate<Rect> predicate);
+    void split(Rect rect);
 }

@@ -13,6 +13,9 @@ public class GaodeRequest {
     public static final int DEFAULT_PAGE = 1;
     public static final String ALL_INFO = "all";
     public static final String BASE_INFO = "base";
+    public static final String DEFAULT_TYPES = "010000|020000|030000|040000|050000|060000" +
+            "|070000|080000|090000|100000|110000|120000|130000|140000" +
+            "|150000|160000|170000|180000|190000|200000";
     private String key;
     private String polygon;
     private String keywords;
@@ -87,7 +90,7 @@ public class GaodeRequest {
                 this.keywords = EMPTY_STRING;
             }
             if (StringUtils.isEmpty(this.types)){
-                this.types = EMPTY_STRING;
+                this.types = DEFAULT_TYPES;
             }
             if (StringUtils.isEmpty(this.extensions)){
                 this.extensions = ALL_INFO;

@@ -2,6 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lwl.bishe.dao.mapper.RectMapper" >
 
+    <resultMap id="rectMap" type="com.lwl.bishe.bean.Rect">
+        <result column="lo1_lng" property="lo1.lng"/>
+        <result column="lo1_lat" property="lo1.lat"/>
+        <result column="lo2_lng" property="lo2.lng"/>
+        <result column="lo2_lat" property="lo2.lat"/>
+        <result column="lo3_lng" property="lo3.lng"/>
+        <result column="lo3_lat" property="lo3.lat"/>
+        <result column="lo4_lng" property="lo4.lng"/>
+        <result column="lo4_lat" property="lo4.lat"/>
+    </resultMap>
+
+
    <insert id="saveRects" parameterType="java.util.List">
        INSERT INTO
        rect(lo1_lng, lo1_lat, lo2_lng, lo2_lat, lo3_lng, lo3_lat,
@@ -18,8 +30,19 @@
        rect(lo1_lng, lo1_lat, lo2_lng, lo2_lat, lo3_lng, lo3_lat,
        lo4_lng, lo4_lat)
        VALUES
-           (#{rect.lo1.lng}, #{rect.lo1.lat},#{rect.lo2.lng}, #{rect.lo2.lat},
-           #{rect.lo3.lng}, #{rect.lo3.lat},#{rect.lo4.lng}, #{rect.lo4.lat})
+           (#{lo1.lng}, #{lo1.lat},#{lo2.lng}, #{lo2.lat},
+           #{lo3.lng}, #{lo3.lat},#{lo4.lng}, #{lo4.lat})
    </insert>
 
+    <update id="clearRects">
+        TRUNCATE TABLE rect
+    </update>
+
+    <select id="listRect" resultMap="rectMap">
+      SELECT * FROM rect LIMIT #{begin} , #{pageSize}
+    </select>
+
+    <select id="countRects" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM rect WHERE enabled = 1
+    </select>
 </mapper>

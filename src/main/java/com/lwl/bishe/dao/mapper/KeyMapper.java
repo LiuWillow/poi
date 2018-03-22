@@ -11,4 +11,7 @@ import java.util.List;
 @Repository
 public interface KeyMapper {
     List<Key> listAllKeys();
+    int initKeys();
+
+    int disableKey(String name);
 }

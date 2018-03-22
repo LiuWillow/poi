@@ -8,8 +8,16 @@
     </resultMap>
 
     <select id="listAllKeys" resultMap="KeyMap">
-      SELECT * FROM `key` WHERE times &lt; 1900
+      SELECT * FROM `key` WHERE times &lt; 29000
     </select>
+
+    <update id="initKeys">
+        UPDATE `key` SET times = 0
+    </update>
+
+    <update id="disableKey" parameterType="java.lang.String">
+        UPDATE `key` SET times = 29000 WHERE `name` = #{name}
+    </update>
 
 
 </mapper>

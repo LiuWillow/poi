@@ -50,4 +50,12 @@ public class Rect {
     public void setLo4(Location lo4) {
         this.lo4 = lo4;
     }
+
+    public String toParam(){
+        return lo1.toParam() + ";"
+                +  lo2.toParam() + ";"
+                + lo3.toParam() + ";"
+                + lo4.toParam() + ";"
+                + lo1.toParam();
+    }
 }
