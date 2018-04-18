@@ -2,8 +2,10 @@ package com.lwl.bishe.util;
 
 import com.lwl.bishe.bean.Location;
 import com.lwl.bishe.bean.Rect;
+import com.mongodb.client.model.geojson.Position;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * date  2018/3/17
@@ -24,4 +26,5 @@ public class RectUtil {
         Location midOfLine2 = getMidOfLine(rect.getLo3(), rect.getLo4());
         return getMidOfLine(midOfLine1, midOfLine2);
     }
+
 }

@@ -9,4 +9,5 @@ import com.lwl.bishe.bean.Key;
 public interface KeyService {
     boolean initKeys();
     Key getUsefulKey();
+    void keyTimesAutoIncrement();
 }

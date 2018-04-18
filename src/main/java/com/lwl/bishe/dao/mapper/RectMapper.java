@@ -3,6 +3,7 @@ package com.lwl.bishe.dao.mapper;
 import com.lwl.bishe.bean.Rect;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 /**
@@ -16,4 +17,9 @@ public interface RectMapper {
     void clearRects();
     List<Rect> listRect(@Param("begin") int begin, @Param("pageSize") int pageSize);
     int countRects();
+
+    @Transactional
+    int updateRectEnablePatch(List<Rect> rectList);
+
+    int updateAllRectsEnabled();
 }

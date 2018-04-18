@@ -5,10 +5,10 @@ import com.lwl.bishe.constant.Constant;
 import com.lwl.bishe.dao.mapper.KeyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * date  2018/3/18
@@ -16,9 +16,9 @@ import java.util.List;
  **/
 @Service
 public class KeyServiceImpl implements KeyService {
-    private int index = 0;
-    private int i = 0;
-    private List<Key> keyList = new ArrayList<>();
+    private Queue<Key> keyQueue = new ConcurrentLinkedQueue<>();
+    private ThreadLocal<Key> localKey = new ThreadLocal<>();
+    private static final ThreadLocal<Integer> keyTimes = new ThreadLocal<>();
 
     @Autowired
     private KeyMapper keyMapper;
@@ -30,15 +30,43 @@ public class KeyServiceImpl implements KeyService {
 
     @Override
     public Key getUsefulKey() {
-        if (keyList.isEmpty()){
-            keyList = keyMapper.listAllKeys();
+        assertKeyNullPoint();
+        //每调用2000次更新数据库times值
+        if (getKeyTimes() % Constant.REQUEST_TIMES_PER_GAP == 0 && getKeyTimes() != 0){
+            keyMapper.updateTimesByName(localKey.get().getName(), getKeyTimes());
         }
-        if (i > Constant.REQUEST_TIMES_LIMIT){
-            i = 0;
-            keyMapper.disableKey(keyList.get(index).getName());
-            index++;
+        //如果大于29000次，换个key
+        if (getKeyTimes() > Constant.REQUEST_TIMES_LIMIT){
+            localKey.set(keyQueue.poll());
+            keyTimes.set(0);
         }
-        i++;
-        return keyList.get(index);
+        return localKey.get();
     }
+
+    @Override
+    public void keyTimesAutoIncrement() {
+        assertKeyTimesNullPointer();
+        keyTimes.set(keyTimes.get() + 1);
+    }
+
+    private void assertKeyNullPoint() {
+        if (keyQueue.isEmpty()){
+            keyQueue.addAll(keyMapper.listAllKeys());
+        }
+        if (localKey.get() == null){
+            localKey.set(keyQueue.poll());
+        }
+    }
+
+    private int getKeyTimes() {
+        assertKeyTimesNullPointer();
+        return keyTimes.get();
+    }
+
+    private void assertKeyTimesNullPointer() {
+        if (ObjectUtils.isEmpty(keyTimes.get())){
+            keyTimes.set(0);
+        }
+    }
+
 }

@@ -1,23 +1,14 @@
 package com.lwl.bishe.controller;
 
-import com.lwl.bishe.bean.Key;
-import com.lwl.bishe.bean.Location;
-import com.lwl.bishe.bean.Rect;
-import com.lwl.bishe.bean.Response;
-import com.lwl.bishe.constant.Constant;
-import com.lwl.bishe.constant.RectConstant;
-import com.lwl.bishe.service.GaodeService;
+import com.lwl.bishe.bean.*;
 import com.lwl.bishe.service.KeyService;
+import com.lwl.bishe.service.PoiService;
 import com.lwl.bishe.service.RectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * date  2018/3/18
@@ -32,6 +23,8 @@ public class DataController {
     @Autowired
     private RectService rectService;
 
+    @Autowired
+    private PoiService poiService;
 
     @PutMapping("/key/init")
     public Response initKeys() {
@@ -45,14 +38,28 @@ public class DataController {
     }
 
     @GetMapping("/rect/split")
-    public Response test() {
-        rectService.initRects();
+    public Response splitRects() {
+        rectService.splitRects();
         return new Response("success");
     }
 
-    @GetMapping("/poi")
-    public Response poi(){
-        //TODO 和这里
+    @GetMapping("/rect/init")
+    public Response initRects() {
+        if (rectService.updateAllRectsEnabled()){
+            return new Response("success");
+        }
+        return new Response("error");
+    }
+
+    @GetMapping("/rect/clear")
+    public Response clearRects() {
+        rectService.clearRects();
+        return new Response("success");
+    }
+
+    @GetMapping("/poi/save")
+    public Response savePois(){
+        poiService.searchPoisAndSave();
         return new Response("ok");
     }
 

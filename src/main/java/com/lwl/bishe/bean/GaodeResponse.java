@@ -8,6 +8,7 @@ import java.util.List;
  **/
 public class GaodeResponse {
     public static final String COUNT = "count";
+
     private int status;
     private int count;
     private String info;

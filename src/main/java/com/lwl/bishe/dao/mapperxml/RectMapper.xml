@@ -3,6 +3,7 @@
 <mapper namespace="com.lwl.bishe.dao.mapper.RectMapper" >
 
     <resultMap id="rectMap" type="com.lwl.bishe.bean.Rect">
+        <id column="id" property="id"/>
         <result column="lo1_lng" property="lo1.lng"/>
         <result column="lo1_lat" property="lo1.lat"/>
         <result column="lo2_lng" property="lo2.lng"/>
@@ -39,10 +40,22 @@
     </update>
 
     <select id="listRect" resultMap="rectMap">
-      SELECT * FROM rect LIMIT #{begin} , #{pageSize}
+      SELECT * FROM rect WHERE enabled = 1 ORDER BY `id`
+       LIMIT #{begin} , #{pageSize}
     </select>
 
     <select id="countRects" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM rect WHERE enabled = 1
+        SELECT COUNT(*) FROM rect
     </select>
+
+    <update id="updateRectEnablePatch" parameterType="java.util.List">
+        UPDATE rect SET enabled = 0 WHERE id IN
+        <foreach collection="list" item="rect" separator="," open="(" close=")">
+            #{rect.id}
+        </foreach>
+    </update>
+
+    <update id="updateAllRectsEnabled">
+        UPDATE rect SET enabled = 1
+    </update>
 </mapper>

@@ -19,28 +19,21 @@ import java.time.LocalDateTime;
 @Service
 public class SplitServiceImpl implements SplitService {
     @Autowired
-    private RectMapper rectMapper;
-    @Autowired
-    private CacheService cacheService;
+    private RectService rectService;
     @Autowired
     private KeyService keyService;
-
     @Autowired
     private GaodeService gaodeService;
-
-    private int i = 0;
 
     @Override
     public void split(Rect rect) {
         Key key = keyService.getUsefulKey();
         int count = gaodeService.getCountByRect(rect, key);
         if (count < Constant.COUNT_LIMIT){
-            if (count < 0){
+            if (count <= 0){
                 return;
             }
-            System.out.println("第" + ++i + "个矩形" + "  " + LocalDateTime.now());
-            cacheService.timesAutoIncrement();
-            rectMapper.saveRect(rect);
+            rectService.saveRect(rect);
             return;
         }
 

@@ -9,7 +9,7 @@ import static ch.qos.logback.core.CoreConstants.EMPTY_STRING;
  * author liuwillow
  **/
 public class GaodeRequest {
-    public static final int DEFAULT_OFFSET = 25;
+    public static final double DEFAULT_OFFSET = 25.0;
     public static final int DEFAULT_PAGE = 1;
     public static final String ALL_INFO = "all";
     public static final String BASE_INFO = "base";
@@ -24,8 +24,7 @@ public class GaodeRequest {
     private Integer page;
     private String extensions;
 
-    public GaodeRequest() {
-    }
+    public GaodeRequest() {}
 
     public GaodeRequest(GaodeBuilder gaodeBuilder){
         this.key = gaodeBuilder.key;
@@ -96,7 +95,7 @@ public class GaodeRequest {
                 this.extensions = ALL_INFO;
             }
             if (this.offset == null){
-                this.offset = DEFAULT_OFFSET;
+                this.offset = (int)DEFAULT_OFFSET;
             }
             if (this.page == null){
                 this.page = DEFAULT_PAGE;

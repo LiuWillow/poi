@@ -8,12 +8,10 @@ import com.lwl.bishe.bean.GaodeResponse;
 import com.lwl.bishe.bean.Key;
 import com.lwl.bishe.bean.Rect;
 import com.lwl.bishe.constant.Constant;
-import com.lwl.bishe.util.HttpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,37 +22,35 @@ import java.util.List;
 @Service
 public class GaodeServiceImpl implements GaodeService {
     @Autowired
-    private CacheService cacheService;
-
+    private HttpService httpService;
     @Override
     public int getCountByRect(Rect rect, Key key) {
         GaodeRequest requestParams = getRequest(rect, key);
         sleepForGapRequest();
-        String resultString = HttpUtil.sendGet(Constant.BASE_URL, requestParams);
+        String resultString = httpService.sendGet(Constant.BASE_URL, requestParams);
         return getCountFromResultString(resultString);
     }
 
     @Override
     public List<GaodeResponse> getGaodeResponseByRect(Rect rect, Key key) {
-
-        GaodeRequest requestParams = getRequest(rect, key);
-        String resultString = HttpUtil.sendGet(Constant.BASE_URL, requestParams);
-        int count = getCountFromResultString(resultString);
+        int count = getCountByRect(rect, key);
         if (count < 0){
             return Collections.emptyList();
         }
+        GaodeRequest requestParams = getRequest(rect, key);
         List<GaodeResponse> list = new ArrayList<>(Constant.DEFAULT_LIST_SIZE);
-        GaodeResponse firstGaodeResponse = analysisRuesltString(resultString);
-        list.add(firstGaodeResponse);
-
         int maxPage = (int) Math.ceil(count / GaodeRequest.DEFAULT_OFFSET);
-        for (int p = 2; p <= maxPage; p++){
-            //TODO zheli
-//            GaodeRequest gaodeRequest = GaodeRequest.newBuilder()
-//                    .key(key)
+        for (int p = 1; p <= maxPage; p++){
+            sleepForGapRequest();
+            requestParams.setPage(p);
+            String tempString = httpService.sendGet(Constant.BASE_URL, requestParams);
+            GaodeResponse response = analysisRuesltString(tempString);
+            if (response.getPois().size() != 1){
+                //api的count有点问题
+                list.add(response);
+            }
         }
-
-        return null;
+        return list;
     }
 
     private GaodeResponse analysisRuesltString(String resultString) {
@@ -79,10 +75,9 @@ public class GaodeServiceImpl implements GaodeService {
     private int getCountFromResultString(String resultString) {
         JSONObject jsonObject = JSON.parseObject(resultString);
         String countString = (String) jsonObject.get(GaodeResponse.COUNT);
-        if (countString.isEmpty()){
+        if (countString == null){
             return -1;
         }
         return Integer.parseInt(countString);
     }
-
 }

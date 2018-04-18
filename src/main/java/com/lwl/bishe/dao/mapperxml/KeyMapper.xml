@@ -8,7 +8,7 @@
     </resultMap>
 
     <select id="listAllKeys" resultMap="KeyMap">
-      SELECT * FROM `key` WHERE times &lt; 29000
+      SELECT * FROM `key` WHERE times = 0
     </select>
 
     <update id="initKeys">
@@ -17,6 +17,9 @@
 
     <update id="disableKey" parameterType="java.lang.String">
         UPDATE `key` SET times = 29000 WHERE `name` = #{name}
+    </update>
+    <update id="updateTimesByName">
+        UPDATE `key` SET times = #{times} WHERE `name` = #{name}
     </update>
 
 

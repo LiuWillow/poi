@@ -1,6 +1,7 @@
 package com.lwl.bishe.controller;
 
 import com.lwl.bishe.bean.Key;
+import com.lwl.bishe.bean.Response;
 import com.lwl.bishe.dao.mapper.KeyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,5 +21,37 @@ public class TestController {
     @GetMapping("/keys")
     public Key getKeys(){
         return keyMapper.listAllKeys().get(0);
+    }
+
+    @GetMapping("/oh")
+    public Object getObject(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("        ****     ****\r\n");
+        builder.append("      *******  *******\r\n");
+        builder.append("     *******************\r\n");
+        builder.append("       ***************\r\n");
+        builder.append("         ***********\r\n");
+        builder.append("           *******\r\n");
+        builder.append("             ***\r\n");
+        return builder.toString();
+    }
+
+    @GetMapping("/test")
+    public String wangzhan(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("马行广傻逼|");
+        builder.append("马行广傻逼|");
+        builder.append("马行广傻逼|");
+        builder.append("马行广傻逼|");
+        builder.append("马行广傻逼|");
+        builder.append("马行广傻逼|");
+        builder.append("马行广傻逼|");
+        builder.append("马行广傻逼|");
+        builder.append("马行广傻逼|");
+        builder.append("马行广傻逼|");
+        builder.append("马行广傻逼|");
+        builder.append("马行广傻逼|");
+        builder.append("马行广傻逼|");
+        return builder.toString();
     }
 }

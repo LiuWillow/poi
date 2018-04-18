@@ -6,6 +6,7 @@ package com.lwl.bishe.bean;
  **/
 public class Response {
     private String msg;
+    private Object data;
 
     public Response() {
     }
@@ -20,5 +21,13 @@ public class Response {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
     }
 }

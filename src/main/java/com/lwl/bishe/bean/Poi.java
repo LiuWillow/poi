@@ -5,6 +5,15 @@ package com.lwl.bishe.bean;
  * author liuwillow
  **/
 public class Poi {
+    public static final String AD_NAME = "adname";
+    public static final String CITY_NAME = "cityname";
+    public static final String ID = "_id";
+    public static final String LOCATION = "location";
+    public static final String NAME = "name";
+    public static final String P_NAME = "pname";
+    public static final String TYPE = "type";
+    public static final String TYPE_CODE = "typecode";
+
     private String id;
     private String name;
     private String type;

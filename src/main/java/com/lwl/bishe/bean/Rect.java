@@ -4,6 +4,7 @@ package com.lwl.bishe.bean;
  * author liuwillow
  **/
 public class Rect {
+    private Integer id;
     private Location lo1;
     private Location lo2;
     private Location lo3;
@@ -49,6 +50,14 @@ public class Rect {
 
     public void setLo4(Location lo4) {
         this.lo4 = lo4;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String toParam(){
